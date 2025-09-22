@@ -1,0 +1,11 @@
+../Core/Src/ta6932.c:5:20:TA_STB	16	static
+../Core/Src/ta6932.c:9:26:TA_sendByte	16	static
+../Core/Src/ta6932.c:13:13:TA_cmd	16	static
+../Core/Src/ta6932.c:19:13:TA_writeSeq	32	static
+../Core/Src/ta6932.c:28:6:TA6932_DisplayOn	16	static
+../Core/Src/ta6932.c:39:20:putRaw	16	static
+../Core/Src/ta6932.c:40:20:putDigit	32	static
+../Core/Src/ta6932.c:46:6:TA6932_Init	8	static
+../Core/Src/ta6932.c:51:6:TA6932_WriteAll	8	static
+../Core/Src/ta6932.c:55:6:TA6932_TestPattern	8	static
+../Core/Src/ta6932.c:75:6:TA6932_CounterDemo	16	static
