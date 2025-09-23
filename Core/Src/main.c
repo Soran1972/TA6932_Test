@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "ta6932.h"
+#include <stdint.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -90,6 +91,12 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  TA6932_Init();
+  TA6932_Clear();                    // يمسح ويكتب
+  TA6932_putDigit(0x00, 2, 0);
+  TA6932_putChar(0x01, '-', 0);
+  TA6932_putRaw(0x0E, 0x80);         // colon ON
+  TA6932_WriteAll();
 
   /* USER CODE END 2 */
 

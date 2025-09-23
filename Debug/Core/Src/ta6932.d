@@ -1,5 +1,5 @@
 Core/Src/ta6932.o: ../Core/Src/ta6932.c ../Core/Inc/ta6932.h \
- ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32C0xx_hal.h \
+ ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal.h \
  ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_ll_system.h \
  ../Drivers/CMSIS/Device/ST/STM32C0xx/Include/stm32c0xx.h \
  ../Drivers/CMSIS/Device/ST/STM32C0xx/Include/stm32c011xx.h \
@@ -9,7 +9,6 @@ Core/Src/ta6932.o: ../Core/Src/ta6932.c ../Core/Inc/ta6932.h \
  ../Drivers/CMSIS/Include/cmsis_gcc.h \
  ../Drivers/CMSIS/Include/mpu_armv7.h \
  ../Drivers/CMSIS/Device/ST/STM32C0xx/Include/system_stm32c0xx.h \
- ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal.h \
  ../Core/Inc/stm32c0xx_hal_conf.h \
  ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal_rcc.h \
  ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal_def.h \
@@ -29,7 +28,7 @@ Core/Src/ta6932.o: ../Core/Src/ta6932.c ../Core/Inc/ta6932.h \
  ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal_spi.h \
  ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal_spi_ex.h
 ../Core/Inc/ta6932.h:
-../Drivers/STM32C0xx_HAL_Driver/Inc/stm32C0xx_hal.h:
+../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal.h:
 ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_ll_system.h:
 ../Drivers/CMSIS/Device/ST/STM32C0xx/Include/stm32c0xx.h:
 ../Drivers/CMSIS/Device/ST/STM32C0xx/Include/stm32c011xx.h:
@@ -39,7 +38,6 @@ Core/Src/ta6932.o: ../Core/Src/ta6932.c ../Core/Inc/ta6932.h \
 ../Drivers/CMSIS/Include/cmsis_gcc.h:
 ../Drivers/CMSIS/Include/mpu_armv7.h:
 ../Drivers/CMSIS/Device/ST/STM32C0xx/Include/system_stm32c0xx.h:
-../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal.h:
 ../Core/Inc/stm32c0xx_hal_conf.h:
 ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal_rcc.h:
 ../Drivers/STM32C0xx_HAL_Driver/Inc/stm32c0xx_hal_def.h:
