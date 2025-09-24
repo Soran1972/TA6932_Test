@@ -1,3 +1,8 @@
+// TA6932 driver (with unified One-API + full legacy API)
+// - يحافظ على الدوال السابقة (WriteAll/WriteOneRaw/...)
+// - يحتوي على font7seg + setGlyph
+// - يضيف الدوال الموحّدة: TA_RAW(), TA6932_putOne(), TA6932_putOneBuf()
+
 #include "ta6932.h"
 
 // SPI handle المُنشأ من CubeMX (عدّل لو تستخدم SPI ثاني)
@@ -7,17 +12,14 @@ extern SPI_HandleTypeDef hspi1;
 static inline void TA_STB(int v){
   HAL_GPIO_WritePin(TA_STB_PORT, TA_STB_PIN, v ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
-
 static HAL_StatusTypeDef TA_sendByte(uint8_t b){
   return HAL_SPI_Transmit(&hspi1, &b, 1, 10);
 }
-
 static void TA_cmd(uint8_t cmd){
   TA_STB(0);
   TA_sendByte(cmd);
   TA_STB(1);
 }
-
 static void TA_writeSeq(uint8_t startAddr, const uint8_t *data, uint8_t len){
   TA_cmd(0x40); // Data set: write, auto-increment
   TA_STB(0);
@@ -33,51 +35,43 @@ static void font_init(void);
 
 static void font_init(void){
   // digits '0'..'9' (حسب خريطتك CC)
-  font7seg['0'] = 0x3F;
-  font7seg['1'] = 0x21;
-  font7seg['2'] = 0x5D;
-  font7seg['3'] = 0x75;
-  font7seg['4'] = 0x63;
-  font7seg['5'] = 0x76;
-  font7seg['6'] = 0x7E;
-  font7seg['7'] = 0x25;
-  font7seg['8'] = 0x7F;
-  font7seg['9'] = 0x77;
+  font7seg['0'] = 0x3F; font7seg['1'] = 0x21; font7seg['2'] = 0x5D; font7seg['3'] = 0x75; font7seg['4'] = 0x63;
+  font7seg['5'] = 0x76; font7seg['6'] = 0x7E; font7seg['7'] = 0x25; font7seg['8'] = 0x7F; font7seg['9'] = 0x77;
 
   // رموز شائعة
   font7seg[' '] = 0x00; // فراغ
   font7seg['-'] = 0x40; // شرطة (g فقط)
   font7seg['_'] = 0x10; // underscore (d)
 
-  // حروف تقريبية (عدلها لاحقاً بـ setGlyph لو حبيت)
-  font7seg['A'] = font7seg['a'] = 0x6F; // a+b+c+e+f+g
-  font7seg['b'] = 0x7C;                // c+d+e+f+g
-  font7seg['C'] = 0x5A;                // a+d+e+f
-  font7seg['c'] = 0x58;                // d+e+g
-  font7seg['d'] = 0x75;                // b+c+d+e+g
-  font7seg['E'] = 0x5E;                // a+d+e+f+g
-  font7seg['F'] = 0x4E;                // a+e+f+g
-  font7seg['G'] = 0x7A;                // approx
-  font7seg['H'] = 0x6C;                // b+c+e+f+g
-  font7seg['I'] = 0x24;                // b+c (approx)
-  font7seg['J'] = 0x31;                // b+c+d (approx)
-  font7seg['K'] = 0x6C;                // ≈ H
-  font7seg['L'] = 0x1A;                // d+e+f
-  font7seg['M'] = 0x2D;                // approx
-  font7seg['N'] = 0x2C;                // ≈ n
-  font7seg['n'] = 0x68;                // c+e+g
-  font7seg['o'] = 0x78;                // c+d+e+g
-  font7seg['P'] = 0x67;                // a+b+e+f+g
-  font7seg['Q'] = 0x73;                // a+b+c+f+g (approx)
-  font7seg['r'] = 0x48;                // e+g
-  font7seg['S'] = 0x76;                // ≈ '5'
-  font7seg['t'] = 0x5E & ~0x20;        // a+d+e+f
-  font7seg['U'] = 0x3A;                // b+c+d+e+f
-  font7seg['V'] = 0x3A;                // ≈ U
-  font7seg['W'] = 0x3D;                // approx
-  font7seg['X'] = 0x6C;                // ≈ H
-  font7seg['Y'] = 0x73;                // a+b+c+f+g (approx)
-  font7seg['Z'] = 0x5B;                // a+b+d+e+g (approx)
+  // حروف تقريبية (يمكن تعديلها بـ setGlyph)
+  font7seg['A'] = font7seg['a'] = 0x6F;
+  font7seg['b'] = 0x7A;
+  font7seg['C'] = 0x5A;
+  font7seg['c'] = 0x58;
+  font7seg['d'] = 0x79;
+  font7seg['E'] = 0x5E;
+  font7seg['F'] = 0x4E;
+  font7seg['G'] = 0x7A;
+  font7seg['H'] = 0x6C;
+  font7seg['I'] = 0x24;
+  font7seg['J'] = 0x31;
+  font7seg['K'] = 0x6C;
+  font7seg['L'] = 0x1A;
+  font7seg['M'] = 0x2D;
+  font7seg['N'] = 0x2C;
+  font7seg['n'] = 0x68;
+  font7seg['o'] = 0x78;
+  font7seg['P'] = 0x67;
+  font7seg['Q'] = 0x73;
+  font7seg['r'] = 0x48;
+  font7seg['S'] = 0x76;
+  font7seg['t'] = 0x5E & ~0x20;
+  font7seg['U'] = 0x3A;
+  font7seg['V'] = 0x3A;
+  font7seg['W'] = 0x3D;
+  font7seg['X'] = 0x6C;
+  font7seg['Y'] = 0x73;
+  font7seg['Z'] = 0x5B;
 }
 
 // ===== Display control =====
@@ -90,7 +84,6 @@ void TA6932_SetBrightness(uint8_t level){  // 0..7
   TA_cmd(0x88 | (s_brightness & 0x07));  // Display ON + brightness
 }
 void TA6932_DisplayOn(void){
-  // تشغيل مع الحفاظ على آخر سطوع
   TA_cmd(0x88 | (s_brightness & 0x07));
 }
 void TA6932_DisplayOff(void){
@@ -106,16 +99,14 @@ void TA6932_putDigit(uint8_t addr, int d, int dp){
   if (dp) v |= 0x80;
   TA6932_putRaw(addr, v);
 }
-
 void TA6932_putChar(uint8_t addr, char ch, int dp){
   uint8_t v = font7seg[(uint8_t)ch];
   if (v == 0x00 && ch != ' ') v = 0x00; // غير معرّف → فراغ
   if (dp) v |= 0x80;
   TA6932_putRaw(addr, v);
 }
-
 void TA6932_setGlyph(uint8_t ch, uint8_t pattern){
-  font7seg[ch] = pattern & 0x7F; // bit7 للـ dp يضاف خارجياً
+  font7seg[ch] = pattern & 0x7F; // bit7 للـ dp يُضاف خارجياً
 }
 
 // تعبئة البافر كامل (بدون memcpy حسب تفضيلك)
@@ -139,43 +130,60 @@ void TA6932_Init(void){
   s_brightness = 7;
   TA6932_DisplayOn();        // تشغيل على سطوع 7
 }
-
 void TA6932_WriteAll(void){
   TA_writeSeq(0x00, g_buf, 16);
 }
-
 void TA6932_Clear(void){
   for (int i=0;i<16;i++) g_buf[i] = 0x00;
   TA6932_WriteAll();
 }
 
-// ===== Fixed-address single write =====
-// 0x44: fixed-address write. ثم [0xC0|addr] + [data].
+// ===== Fixed-address single write (واجهات قديمة) =====
 void TA6932_WriteOneRaw(uint8_t addr, uint8_t value){
-  // أمر الكتابة الثابتة
+  // 0x44: fixed-address write. ثم [0xC0|addr] + [data].
   TA_STB(0); uint8_t cmd = 0x44; HAL_SPI_Transmit(&hspi1, &cmd, 1, 10); TA_STB(1);
-  // العنوان + الداتا
   TA_STB(0);
   uint8_t a = 0xC0 | (addr & 0x0F);
   HAL_SPI_Transmit(&hspi1, &a, 1, 10);
   HAL_SPI_Transmit(&hspi1, &value, 1, 10);
   TA_STB(1);
-  // مزامنة البافر
-  TA6932_putRaw(addr, value);
+  TA6932_putRaw(addr, value); // مزامنة البافر
 }
-
 void TA6932_putDigitOne(uint8_t addr, int d, int dp){
   uint8_t v = 0x00;
   if (d >= 0 && d <= 9) v = font7seg['0' + d];
   if (dp) v |= 0x80;
   TA6932_WriteOneRaw(addr, v);
 }
-
 void TA6932_putCharOne(uint8_t addr, char ch, int dp){
   uint8_t v = font7seg[(uint8_t)ch];
   if (v == 0x00 && ch != ' ') v = 0x00;
   if (dp) v |= 0x80;
   TA6932_WriteOneRaw(addr, v);
+}
+
+// ===== Unified One-API (الجديدة) =====
+static uint8_t TA_resolveValue(int value, int dp){
+  uint8_t v = 0x00;
+  if (value & 0x100){                // RAW via TA_RAW()
+    v = (uint8_t)(value & 0xFF);
+  } else if (value >= 0 && value <= 9){ // Digit
+    v = font7seg['0' + value];
+  } else if (value >= 32 && value <= 126){ // Printable ASCII
+    v = font7seg[(uint8_t)value];
+  } else {
+    v = 0x00; // غير معروف → فراغ
+  }
+  if (dp) v |= 0x80;
+  return v;
+}
+void TA6932_putOne(uint8_t addr, int value, int dp){
+  uint8_t v = TA_resolveValue(value, dp);
+  TA6932_WriteOneRaw(addr, v);
+}
+void TA6932_putOneBuf(uint8_t addr, int value, int dp){
+  uint8_t v = TA_resolveValue(value, dp);
+  TA6932_putRaw(addr, v);
 }
 
 // ===== Demos =====
@@ -198,7 +206,6 @@ void TA6932_TestPattern(void){
   TA6932_putRaw(0x0F,0x00);
   TA6932_WriteAll();
 }
-
 void TA6932_CounterDemo(void){
   for(int d=0; d<10; d++){
     for(int addr=0; addr<14; addr++){
@@ -207,6 +214,6 @@ void TA6932_CounterDemo(void){
     TA6932_putRaw(0x0E, 0x80); // colon ON
     TA6932_putRaw(0x0F, 0x00); // weekday off
     TA6932_WriteAll();
-    HAL_Delay(300);
+    HAL_Delay(1000);
   }
 }

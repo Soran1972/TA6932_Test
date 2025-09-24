@@ -94,6 +94,7 @@ int main(void)
   TA6932_Init();
   TA6932_Clear();                    // يمسح ويكتب
  HAL_Delay(1000);
+ goto Test_2;
  TA6932_TestPattern(); //write serialy digit  to 16
  HAL_Delay(1000);
  TA6932_CounterDemo(); //counter 0 to 9
@@ -112,8 +113,44 @@ int main(void)
 TA6932_putDigitOne(0, 1, 0); //Write 1 to digit 1
 TA6932_putDigitOne(13, 9,0); // write 9 to digit 13
 TA6932_putCharOne(1, 'A', 0);
+TA6932_WriteOneRaw(4, 3);
+//=========
+Test_2:
+TA6932_putOne(0, 1, 0);
+TA6932_putOne(1, 'A', 0);
+TA6932_putOne(2,'t', 0);
+//===================
+TA6932_putOneBuf(0, 0, 0);
+TA6932_putOneBuf(1, 1, 0);
+TA6932_putOneBuf(2, 2, 0);
+TA6932_putOneBuf(3, 3, 0);
+TA6932_putOneBuf(4, 4, 0);
+TA6932_putOneBuf(5, 5, 0);
+TA6932_putOneBuf(6, 6, 0);
+TA6932_putOneBuf(7, 7, 0);
+TA6932_putOneBuf(8, 8, 0);
+TA6932_putOneBuf(9, 9, 0);
 
+TA6932_putOneBuf(0xA,'A', 0);
+TA6932_putOneBuf(0xB,'b', 0);
+TA6932_putOneBuf(0xC,'c', 0);
+TA6932_putOneBuf(0xD,'d', 0);
+TA6932_putOneBuf(0xE,'F', 0);
+TA6932_WriteAll();
 
+HAL_Delay(1000);
+TA6932_Clear();
+for(counter=0;counter<16;counter++)
+{
+	TA6932_putOne(counter, 1, 0);
+ HAL_Delay(200);
+}
+//=========================================================================Write buffer
+//                 1      A     b   c     d  Blank  1     2      3
+uint8_t digit []={0x21, 0x6F,0x7A,0x58,0x79,0,0,0,0x21, 0x5D, 0x75 };
+TA6932_loadBuffer(digit);
+TA6932_WriteAll();
+//=========================================================================
 
 
 

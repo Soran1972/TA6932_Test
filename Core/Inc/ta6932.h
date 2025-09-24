@@ -36,7 +36,7 @@ void TA6932_loadBuffer16(uint8_t b0,uint8_t b1,uint8_t b2,uint8_t b3,
                          uint8_t b8,uint8_t b9,uint8_t b10,uint8_t b11,
                          uint8_t b12,uint8_t b13,uint8_t b14,uint8_t b15);
 
-// ===== كتابة خانة واحدة مباشرة (Fixed Address) =====
+// ===== كتابة خانة واحدة مباشرة (Fixed Address) – الواجهات القديمة =====
 void TA6932_WriteOneRaw(uint8_t addr, uint8_t value);
 void TA6932_putDigitOne(uint8_t addr, int d, int dp);
 void TA6932_putCharOne(uint8_t addr, char ch, int dp);
@@ -47,7 +47,15 @@ void TA6932_DisplayOn(void);
 void TA6932_DisplayOff(void);
 
 // ===== تحكم بالفونت =====
-void TA6932_setGlyph(uint8_t ch, uint8_t pattern);  // ضبط/تغيير نمط محرف (bit7=dp؛ a..g في bit0..6)
+void TA6932_setGlyph(uint8_t ch, uint8_t pattern);  // ضبط/تغيير نمط محرف (bit7=dp يُضاف خارجياً)
+
+// ===== Unified One-API (الجديدة) =====
+// ميّز القيمة كـ RAW بهذا الماكرو (لا يتعارض مع الأرقام/الأحرف)
+#define TA_RAW(x) (0x100 | ((x) & 0xFF))
+
+// دالة موحّدة: value يمكن أن يكون رقم 0..9 أو حرف ASCII أو TA_RAW(نمط)
+void TA6932_putOne(uint8_t addr, int value, int dp);     // كتابة فورية لخانة واحدة
+void TA6932_putOneBuf(uint8_t addr, int value, int dp);  // تعبئة البافر فقط
 
 #ifdef __cplusplus
 }
