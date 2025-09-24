@@ -207,6 +207,6 @@ void TA6932_CounterDemo(void){
     TA6932_putRaw(0x0E, 0x80); // colon ON
     TA6932_putRaw(0x0F, 0x00); // weekday off
     TA6932_WriteAll();
-    HAL_Delay(1000);
+    HAL_Delay(300);
   }
 }

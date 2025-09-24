@@ -27,7 +27,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+ uint8_t counter =0;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -93,6 +93,28 @@ int main(void)
   /* USER CODE BEGIN 2 */
   TA6932_Init();
   TA6932_Clear();                    // يمسح ويكتب
+ HAL_Delay(1000);
+ TA6932_TestPattern(); //write serialy digit  to 16
+ HAL_Delay(1000);
+ TA6932_CounterDemo(); //counter 0 to 9
+ TA6932_DisplayOff();  //OFF Display
+ HAL_Delay(1000);
+ TA6932_DisplayOn();   //OFF display
+
+ while(counter<7)// Brightness
+ {
+	 TA6932_SetBrightness(counter) ;
+ counter++;
+ HAL_Delay(200);
+ };
+
+ TA6932_Clear();
+TA6932_putDigitOne(0, 1, 0); //Write 1 to digit 1
+TA6932_putDigitOne(13, 9,0); // write 9 to digit 13
+TA6932_putCharOne(1, 'A', 0);
+
+
+
 
 
   /* USER CODE END 2 */
