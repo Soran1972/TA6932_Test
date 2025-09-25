@@ -1,3 +1,7 @@
+// TA6932
+//Version:1.0
+//Date:25/9/2025
+
 #ifndef __TA6932_H
 #define __TA6932_H
 

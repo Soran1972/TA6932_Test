@@ -1,0 +1,15 @@
+../Core/Src/ds3231_v3.c:15:9:DS3231_BCD2BIN	16	static
+../Core/Src/ds3231_v3.c:16:9:DS3231_BIN2BCD	24	static
+../Core/Src/ds3231_v3.c:18:6:DS3231_Init	16	static
+../Core/Src/ds3231_v3.c:21:26:ds_write	32	static
+../Core/Src/ds3231_v3.c:25:26:ds_read	32	static
+../Core/Src/ds3231_v3.c:31:19:DS3231_SetTime	32	static
+../Core/Src/ds3231_v3.c:43:19:DS3231_GetTime	32	static
+../Core/Src/ds3231_v3.c:58:19:DS3231_Enable1HzSQW	24	static
+../Core/Src/ds3231_v3.c:67:19:DS3231_DisableSQW	24	static
+../Core/Src/ds3231_v3.c:76:19:DS3231_ReadTemperature	32	static
+../Core/Src/ds3231_v3.c:87:19:DS3231_ReadControl	16	static
+../Core/Src/ds3231_v3.c:88:19:DS3231_WriteControl	16	static
+../Core/Src/ds3231_v3.c:89:19:DS3231_ReadStatus	16	static
+../Core/Src/ds3231_v3.c:90:19:DS3231_WriteStatus	16	static
+../Core/Src/ds3231_v3.c:93:19:DS3231_EnsureInitialized	48	static

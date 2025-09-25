@@ -1,4 +1,6 @@
 // TA6932 driver (with unified One-API + full legacy API)
+// Version: 1.0
+//Date:25/9/2025
 // - يحافظ على الدوال السابقة (WriteAll/WriteOneRaw/...)
 // - يحتوي على font7seg + setGlyph
 // - يضيف الدوال الموحّدة: TA_RAW(), TA6932_putOne(), TA6932_putOneBuf()
