@@ -1,0 +1,38 @@
+# ===== STM32CubeIDE / Eclipse =====
+.settings/
+.metadata/
+.project
+.cproject
+
+# ===== Build Output =====
+/Debug/
+/Release/
+/build/
+/out/
+/bin/
+/obj/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# ===== Temporary / Logs =====
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# ===== OS Files =====
+Thumbs.db
+desktop.ini
+
+# ===== IDE Specific =====
+.vscode/
+.idea/
+
+# ===== Optional: Auto-generated Drivers (لو تحب تحذفهم من Git) =====
+# Drivers/
+# Middlewares/
